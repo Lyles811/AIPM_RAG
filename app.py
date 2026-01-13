@@ -14,6 +14,34 @@ from rag.index import save_index, load_index
 st.set_page_config(page_title="AI 产品经理知识库 RAG", page_icon="📚", layout="wide")
 
 st.title("📚 AI 产品经理基础知识库问答（RAG）")
+
+# ===== Demo Access Control (optional but recommended) =====
+demo_pass = None
+demo_max = None
+try:
+    if "DEMO_PASSCODE" in st.secrets:
+        demo_pass = str(st.secrets["DEMO_PASSCODE"])
+    if "DEMO_MAX_QUESTIONS" in st.secrets:
+        demo_max = int(st.secrets["DEMO_MAX_QUESTIONS"])
+except Exception:
+    pass
+
+# fallback to env (local)
+demo_pass = demo_pass or os.getenv("DEMO_PASSCODE")
+demo_max = demo_max or int(os.getenv("DEMO_MAX_QUESTIONS", "3"))
+
+if demo_pass:
+    with st.sidebar:
+        st.subheader("访问控制")
+        entered = st.text_input("演示访问码", type="password", placeholder="HR 我会单独发你")
+    if entered != demo_pass:
+        st.info("请输入演示访问码后再使用（用于防止公共链接被滥用）。")
+        st.stop()
+
+if "q_count" not in st.session_state:
+    st.session_state.q_count = 0
+
+
 st.caption("回答会基于知识库片段，并强制给出引用。适合作品集展示：PRD/MVP/评估/上线闭环。")
 
 with st.sidebar:
@@ -65,7 +93,12 @@ question = st.text_area("输入你的问题", placeholder="例如：PRD 应该�
 
 col1, col2 = st.columns([1, 3])
 with col1:
-    ask = st.button("问一下", type="primary", use_container_width=True)
+    ask = st.button(
+    "问一下",
+    type="primary",
+    use_container_width=True,
+    disabled=(st.session_state.q_count >= demo_max)
+)
 with col2:
     st.write("")
 
@@ -92,6 +125,10 @@ if ask:
                 st.caption(f"source: {r.source_path}")
 
         st.caption(f"Latency: {t1 - t0:.2f}s")
+
+        st.session_state.q_count += 1
+        st.sidebar.caption(f"本次演示已用：{st.session_state.q_count}/{demo_max}")
+
 
         st.divider()
         st.subheader("🧾 反馈（帮助你做数据闭环）")

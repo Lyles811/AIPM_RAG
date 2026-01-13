@@ -5,9 +5,26 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# def _env(name: str, default: str | None = None) -> str | None:
+#     v = os.getenv(name)
+#     return v if v is not None and v != "" else default
 def _env(name: str, default: str | None = None) -> str | None:
     v = os.getenv(name)
-    return v if v is not None and v != "" else default
+    if v is not None and v != "":
+        return v
+
+    # Streamlit Cloud: read from st.secrets if available
+    try:
+        import streamlit as st
+        if name in st.secrets:
+            sv = st.secrets[name]
+            if sv is not None and str(sv) != "":
+                return str(sv)
+    except Exception:
+        pass
+
+    return default
+
 
 @dataclass(frozen=True)
 class Settings:
