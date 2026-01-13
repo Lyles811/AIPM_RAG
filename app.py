@@ -33,7 +33,7 @@ demo_max = demo_max or int(os.getenv("DEMO_MAX_QUESTIONS", "3"))
 if demo_pass:
     with st.sidebar:
         st.subheader("访问控制")
-        entered = st.text_input("演示访问码", type="password", placeholder="HR 我会单独发你")
+        entered = st.text_input("演示访问码", type="password", placeholder="请咨询作者获取")
     if entered != demo_pass:
         st.info("请输入演示访问码后再使用（用于防止公共链接被滥用）。")
         st.stop()
