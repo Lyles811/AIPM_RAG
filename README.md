@@ -4,7 +4,7 @@
 
 ---
 
-## 你能用这个项目证明什么能力（给 HR 看）
+## 项目能力
 - 会写 **PRD / MVP / 验收口径**（见 `docs/PRD.md`）
 - 会做 **RAG 闭环产品**：知识库→索引→问答→引用→反馈→评估→迭代
 - 会做 **上线交付**：本地可运行、别人可复现、可部署到线上（见 `docs/Deployment.md`）
@@ -58,7 +58,7 @@ streamlit run app.py
 ├─ ingest.py              # 知识库索引构建脚本（embedding + 向量索引）
 ├─ rag/                   # RAG 核心逻辑
 ├─ data/
-│  ├─ kb/                 # ✅ 你的 AI 产品经理知识库（Markdown）
+│  ├─ kb/                 # ✅ AI 产品经理知识库（Markdown）
 │  ├─ eval/               # 离线评测集（golden.jsonl）
 │  └─ index/              # 生成的索引（默认不提交）
 └─ docs/                  # PRD / MVP / 架构 / 评估 / 部署文档
@@ -67,7 +67,6 @@ streamlit run app.py
 ---
 
 ## 部署到线上（让别人也能用）
-GitHub 只是代码托管，要让别人“点开就能用”，需要把 Demo 部署到平台：
 - Streamlit Community Cloud（推荐，最简单）
 - Hugging Face Spaces（也很常见）
 - Render / Railway / Fly.io（更像生产）
